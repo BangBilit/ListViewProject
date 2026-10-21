@@ -65,6 +65,24 @@ class MainActivity : AppCompatActivity() {
         layout.addView(tvOld)
         layout.addView(etNew)
 
+        builder.setView(layout)
+        builder.setPositiveButton("Update") { dialog, _ ->
+            val newValue = etNew.text.toString().trim()
+            if (newValue.isNotEmpty()) {
+                data[position] = newValue
+                adapter.notifyDataSetChanged()
+                Toast.makeText(this, "Data diupdate jadi: $newValue", Toast.LENGTH_SHORT).show()
+                } else {
+                Toast.makeText(this, "Data baru tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Batal") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.create().show()
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
