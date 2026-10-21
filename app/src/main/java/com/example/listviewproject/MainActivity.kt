@@ -5,7 +5,10 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.ListView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
@@ -26,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         builder.setMessage("Pilih tindakan yang ingin dilakukan")
 
         builder.setPositiveButton("Update") { _, _ ->
-            // untuk update
+            showUpdateDialog(position, selectedItem, data, adapter)
         }
         builder.setNegativeButton("Delete") { _, _ ->
             data.removeAt(position)
@@ -37,6 +40,31 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         builder.create().show()
+    }
+
+    private fun showUpdateDialog(
+        position: Int,
+        oldValue: String,
+        data: MutableList<String>,
+        adapter: ArrayAdapter<String>) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Update Data")
+
+        val layout = LinearLayout(this)
+        layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(50, 40, 150, 10)
+
+        val tvOld = TextView(this)
+        tvOld.text = "Data lama: $oldValue"
+        tvOld.textSize = 16f
+
+        val etNew = EditText(this)
+        etNew.hint = "Masukkan data baru"
+        etNew.setText(oldValue)
+
+        layout.addView(tvOld)
+        layout.addView(etNew)
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                 }
             })
 
-        _lv1.setOnTouchListener { v, event ->
+        _lv1.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
             false
         }
